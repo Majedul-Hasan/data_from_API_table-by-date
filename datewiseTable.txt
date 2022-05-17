@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jQuery.getJSON demo</title>
+    <style>
+        
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .whotable{
+            width: 100%;
+            max-width: 1050px;
+            
+            margin: auto;
+        }
+        img {
+            height: 100px;
+            float: left;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        
+        .table {
+            width: 100%;
+            
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+        
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .table tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+        
+        .text-center {
+            text-align: center !important;
+        }
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+        
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+        
+        .table-bordered thead th,
+        .table-bordered thead td {
+            border-bottom-width: 2px;
+        }
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6 !important;
+        }
+        
+        .m-auto {
+            margin: auto !important;
+        }
+        
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .mt-4,
+        .my-4 {
+            margin-top: 1.5rem !important;
+        }
+        .mt-2,
+        .my-2 {
+            margin-top: .5rem !important;
+        }   
+        
+        
+        
+        
+        
+        
+        
+        .sorties{
+            width: 100%;
+            display: flex;
+            justify-content:space-around;
+            align-items: center;
+        }
+        .sorties div{
+            padding: 3px 5px;
+        }
+        .sorties:nth-of-type(n){
+            background-color: #bbf5747d;
+        }
+        .sorties:nth-of-type(2n){
+            background-color: #e5e5e5;
+        }
+        
+        .font-weight-bold{
+            font-weight: bold;
+        }
+        .d-flex{
+            display: flex;
+        }
+        .flex-column{
+            flex-direction: column;
+            
+        }
+        .justify-content-center{
+            justify-content: center;
+        }
+        .w-100{
+            width: 100%;
+        }
+        .align-items-center{
+            align-items: center;
+        }
+        .w-75{
+            width: 75%;
+        }
+        .text-center{
+            text-align: center;
+        }
+        
+        
+    </style>
+    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" >
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>-->
+        
+        <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+        
+    </head>
+    <body>
+        <div class='d-flex flex-column justify-content-center w-100 align-items-center mt-5 '>
+            <div class=" w-75  text-center " style='font-weight: 500; font-size:50px' >
+                Start List LSPM
+            </div>
+            <div class=" w-25 d-flex"  style='width: 340px;'>
+                <div class='  w-75 text-right pr-3 ' style='font-weight: 500; font-size:45px ;'>
+                    powered by
+                    
+                </div>
+                <div class='w-25 bg-white' >
+                    <h2 class='  text-center p-0  'style=' font-size:45px; color:#74b1f5'> KISS
+                    </h2>
+                    <h4 class='  text-center p-0  ' style=' font-size:20px;color: #74b1f5'> Technologies
+                    </h4>
+                    
+                </div>
+                
+            </div>
+            <div class=" w-75  text-center " style='font-size: 18px; font-weight: 500; ' >
+                La start list automatica mostra tutti i decolli
+                ed atterraggi dal 1° di Gennaio dell’anno in
+                corso di tutti gli aeromobili equipaggiati con
+                FLARM e registrati ad Open Glider Network.
+            </div>
+        </div>
+        
+        <div class="whotable container" style="padding-bottom: 20px;padding-left: 5px; padding-right: 5px;  margin-top: 20px;">
+            
+        </div>            
+        
+        
+        <script >
+            
+            
+            
+            
+            
+            async function getData() {
+                const API = 'https://ktrax.kisstech.ch/backend/logbook?query_type=ap&id=LSPM&tz=2&dbeg=2022-01-01'
+                //let url = 'users.json';
+                try {
+                    let res = await fetch(API);
+                    return await res.json();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            
+            
+            async function renderData() {
+                let data = await getData();
+                console.log(data);
+                const {max_takeoffs, max_dalt, last_ldg, first_tkof, expiry_date, end_date, count, begin_date, query_type, query_canonicalized, num_takeoffs, max_takeoffs_reached, time_zone, t_end, t_begin, sum_dt, sum_dalt, subscription_category, subscribed, sorties} = data
+                
+                
+                let date = sorties.map(item =>  item.date) 
+                
+                let uniqueDate = [...new Set(date)];
+                
+                console.log(uniqueDate);
+                
+                let html = '';
+                
+                
+                uniqueDate.map(x=>{
+                    var htmlSegment = `<div><p class=' mt-4 mb-0 font-weight-bold '>  ${x}  </p> 
+                        <table class="table text-center table-bordered m-auto table-striped mt-2 w-100 block "  style="padding-bottom: 20px; margin-top: 20px;">
+                            <thead class=' text-center w-100 ' style='background-color: #74b1f5;'>
+                                <tr>
+                                    <th scope="col"><b>NR</b></th>
+                                    <th scope="col"><b>AIRCRAFT</b></th>
+                                    
+                                    <th scope="col"><b>TYPE</b></th>
+                                    <th scope="col" colspan="2"><b>TAKEOFF</b></th>
+                                    <th scope="col" colspan="2"><b>LANDING</b></th>
+                                    <th scope="col"><b>TIME</b></th>
+                                    <th scope="col"><b>AGL</b></th>
+                                    <th scope="col"><b><a href="/checkin/">CREW</a></b></th>
+                                    <th scope="col"><b>REMARK</b></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                `
+                                
+                                
+                                
+                                
+                                sorties.map((y, i)=>{
+                                    if(x === y.date){
+                                        htmlSegment +=     `<tr>
+                                            <td>${i+1}</td>
+                                            <td><a >${y?.cs}</a></td>
+                                            
+                                            <td>${y?.actype}</td> 
+                                            <td>${y?.tkof?.time}</td>
+                                            <td>${y?.tkof?.rwy}</td>
+                                            <td>${y?.ldg?.time}</td>
+                                            <td>${y?.ldg?.rwy}</td>
+                                            <td>${y?.dt}</td>
+                                            <td>${y?.dalt}m</td>
+                                            <td> <a>${y?.p1?.name}<a/><br/><a>${y?.p2?.name}<a/> </td>
+                                                <td> <a>${y?.tkof?.loc}<a/> </td>
+                                                </tr>
+                                                
+                                                `
+                                            }
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                        })
+                                        htmlSegment += '</tbody> </table></div>'
+                                        
+                                        
+                                        
+                                        html += htmlSegment;
+                                        
+                                    })
+                                    
+                                    
+                                    
+                                    let container = document.querySelector('.container');
+                                    container.innerHTML = html;
+                                    
+                                }
+                                renderData();
+                                
+                                
+                                
+                            </script>
+                            
+                        </body>
+                        </html>

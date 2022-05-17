@@ -31,7 +31,7 @@ async function renderData() {
 
      uniqueDate.map(x=>{
           var htmlSegment = `<div><p class=' mt-4 mb-0 font-weight-bold '>  ${x}  </p> 
-          <table class="table text-center table-bordered m-auto table-striped mt-4 w-100 block "  style="padding-bottom: 20px; margin-top: 20px;">
+          <table class="table text-center table-bordered m-auto table-striped mt-2 w-100 block "  style="padding-bottom: 20px; margin-top: 20px;">
           <thead class=' text-center w-100 ' style='background-color: #74b1f5;'>
           <tr>
                     <th scope="col"><b>NR</b></th>
@@ -51,11 +51,10 @@ async function renderData() {
             
              `
         
-          
-
-        
               sorties.map((y, i)=>{
-                  if(x === y.date){
+                  if(x === y.date){ 
+                      
+                     
                   htmlSegment +=     `<tr>
         <td>${i+1}</td>
         <td><a >${y?.cs}</a></td>
@@ -66,13 +65,13 @@ async function renderData() {
         <td>${y?.ldg?.time}</td>
         <td>${y?.ldg?.rwy}</td>
         <td>${y?.dt}</td>
-        <td>${y?.seqnr}m</td>
+        <td>${y?.dalt}m</td>
         <td> <a>${y?.p1?.name}<a/><br/><a>${y?.p2?.name}<a/> </td>
         <td> <a>${y?.tkof?.loc}<a/> </td>
         </tr>
        
         `
-                  }
+         }
                   
                   
                       
